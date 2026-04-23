@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kubernetes temp
+*.log
+
+# Terraform (for next phase)
+.terraform/
+*.tfstate

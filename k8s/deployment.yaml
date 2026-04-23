@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-app
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: devops
+
+  template:
+    metadata:
+      labels:
+        app: devops
+
+    spec:   # ✅ THIS WAS MISSING
+      containers:
+      - name: devops
+        image: devops-app:latest
+        imagePullPolicy: Never
+
+        ports:
+        - containerPort: 8080
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
