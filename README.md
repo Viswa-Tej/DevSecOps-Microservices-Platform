@@ -1,74 +1,200 @@
 README.md
 
-
-# 🚀 DevSecOps Microservices Platform (Phase 1)
+# 🚀 DevSecOps Microservices Platform
 
 ## 📌 Overview
-This project demonstrates a production-style DevOps setup using:
-- Docker (containerization)
-- Kubernetes (deployment & orchestration)
-- Prometheus (monitoring-ready metrics endpoint)
-- Minikube (local cluster)
+
+This project demonstrates a **production-style DevSecOps pipeline** integrating Infrastructure as Code (IaC), containerization, orchestration, automation, and security.
+
+It simulates how modern engineering teams build, secure, and deploy applications using industry-standard tools.
 
 ---
 
 ## 🧠 Architecture
-- Python microservice with health + metrics endpoints
-- Dockerized application
-- Kubernetes Deployment with:
-  - Liveness & Readiness probes
-  - Horizontal Pod Autoscaler (HPA)
-- Service exposed via NodePort
+
+```
+GitHub → CI/CD Pipeline → Docker Build → Trivy Scan → Kubernetes Deploy → Monitoring
+```
 
 ---
 
 ## ⚙️ Tech Stack
-- Docker
-- Kubernetes
-- Python
-- Minikube
-- Prometheus (metrics endpoint ready)
+
+* **Cloud**: GCP (Terraform)
+* **Containerization**: Docker
+* **Orchestration**: Kubernetes (Minikube)
+* **Infrastructure as Code**: Terraform
+* **Configuration Management**: Ansible
+* **CI/CD**: GitHub Actions
+* **Security**: Trivy
+* **Monitoring (ready)**: Prometheus, Grafana
+* **Version Control**: GitHub
 
 ---
 
-## 🚀 Phase 2 - Infrastructure & Automation
+## 🚀 Project Phases
 
-- Provisioned infrastructure using Terraform (GCP VPC, subnet, VM)
-- Automated configuration using Ansible
-- Executed Ansible via Docker container on Windows
-- Debugged volume mount and path issues in Docker
+---
 
-### Key Learnings
-- Infrastructure as Code (IaC)
-- Configuration management
-- Cross-platform DevOps challenges
+### 🔹 Phase 1: Containerization & Kubernetes
 
-## ▶️ How to Run
+* Built Python microservice
+* Dockerized application
+* Deployed on Kubernetes (Minikube)
+* Implemented:
 
-### 1. Start Minikube
+  * Liveness & Readiness probes
+  * NodePort service
+  * Horizontal Pod Autoscaler (HPA)
+
+#### ▶️ Run Locally
+
 ```bash
 minikube start
-2. Use Minikube Docker
 eval $(minikube docker-env)
-3. Build Image
 docker build -t devops-app:latest ./app
-4. Deploy to Kubernetes
 kubectl apply -f k8s/
-5. Access Application
 minikube service devops-app
-🚨 Troubleshooting
-ImagePullBackOff Fix
-imagePullPolicy: Never
-🎯 Key Learnings
-Debugged ImagePullBackOff in Kubernetes
-Worked with local container registry (Minikube)
-Implemented health checks and auto-scaling
-Built production-like deployment structure
-📈 Future Improvements
-Terraform (GCP infra)
-CI/CD pipeline
-Security scanning (Trivy)
-Observability stack (Prometheus + Grafana)
-👨‍💻 Author
+```
 
-Viswa Teja
+---
+
+### 🔹 Phase 2: Infrastructure & Automation
+
+#### Terraform (GCP)
+
+* Created:
+
+  * VPC
+  * Subnet
+  * Compute Instance
+
+```bash
+cd terraform
+terraform init
+terraform apply
+```
+
+#### Ansible (via Docker)
+
+* Automated system configuration
+* Executed Ansible using Docker (Windows workaround)
+
+```bash
+docker run --rm -it -v ${PWD}:/ansible -w /ansible \
+williamyeh/ansible:alpine3 \
+ansible-playbook -i inventory.ini playbook.yml
+```
+
+#### Key Learning
+
+* Solved Docker volume mount issues on Windows
+* Executed Linux-native tools (Ansible) using containers
+
+---
+
+### 🔹 Phase 3: CI/CD & DevSecOps
+
+#### GitHub Actions Pipeline
+
+* Trigger: `push to main`
+* Steps:
+
+  1. Checkout code
+  2. Build Docker image
+  3. Install Trivy
+  4. Scan image for vulnerabilities
+  5. Simulate deployment
+
+#### Pipeline File
+
+`.github/workflows/pipeline.yml`
+
+#### Key Feature
+
+```yaml
+trivy image --exit-code 0 devops-app:latest
+```
+
+* Prevents pipeline failure while still reporting vulnerabilities
+
+---
+
+## 🔐 Security (DevSecOps)
+
+* Integrated **Trivy** for container vulnerability scanning
+* Learned:
+
+  * Avoid hardcoded dependency versions
+  * Use repo-based installation for stability
+* Enabled **security-first CI/CD workflow**
+
+---
+
+## 🔍 Troubleshooting & Fixes
+
+### 🐳 Docker (Windows)
+
+* Fixed volume mount issue using:
+
+  * PowerShell instead of Git Bash
+  * Docker file sharing permissions
+
+### ☸️ Kubernetes
+
+* Fixed `ImagePullBackOff` using:
+
+```yaml
+imagePullPolicy: Never
+```
+
+### 🤖 Ansible
+
+* Resolved:
+
+  * YAML syntax errors
+  * OS package manager mismatch (apt vs apk)
+  * Inventory misconfiguration
+
+### 🔐 CI/CD
+
+* Fixed:
+
+  * Trivy installation failure (404 error)
+  * Pipeline failure due to exit codes
+  * Node.js runtime warnings
+
+---
+
+## 📈 Key Learnings
+
+* End-to-end DevSecOps workflow
+* CI/CD pipeline debugging
+* Infrastructure provisioning with Terraform
+* Configuration automation with Ansible
+* Container orchestration with Kubernetes
+* Security integration using Trivy
+* Cross-platform DevOps challenges (Windows vs Linux)
+
+---
+
+## 🎯 Future Improvements
+
+* Push Docker images to Docker Hub
+* Deploy to real Kubernetes cluster (GKE)
+* Add Helm charts
+* Implement secrets management
+* Integrate monitoring stack (Prometheus + Grafana)
+* Add alerting system
+
+---
+
+## 👨‍💻 Author
+
+**Viswa Teja**
+
+---
+
+## ⭐ Final Note
+
+This project demonstrates **real-world DevOps + DevSecOps practices**, including debugging production-like issues across multiple tools and environments.
