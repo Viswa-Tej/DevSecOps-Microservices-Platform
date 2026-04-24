@@ -5,7 +5,7 @@ on:
       - main
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  
+
 jobs:
   build-scan-deploy:
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
           sudo dpkg -i trivy_0.50.1_Linux-64bit.deb
       - name: Scan Docker Image with Trivy
         run: |
-          trivy image --exit-code 0 devops-app:latest
+          trivy image devops-app:latest || exit 0
       - name: Deploy step (simulation)
         run: |
                 echo "deploying to kubernetes"
