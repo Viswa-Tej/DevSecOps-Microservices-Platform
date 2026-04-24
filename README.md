@@ -31,6 +31,18 @@ This project demonstrates a production-style DevOps setup using:
 
 ---
 
+## 🚀 Phase 2 - Infrastructure & Automation
+
+- Provisioned infrastructure using Terraform (GCP VPC, subnet, VM)
+- Automated configuration using Ansible
+- Executed Ansible via Docker container on Windows
+- Debugged volume mount and path issues in Docker
+
+### Key Learnings
+- Infrastructure as Code (IaC)
+- Configuration management
+- Cross-platform DevOps challenges
+
 ## ▶️ How to Run
 
 ### 1. Start Minikube
